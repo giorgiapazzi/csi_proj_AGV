@@ -1,4 +1,5 @@
 clc
+load('dataset.mat');
 J = get_linearization();
 s = tf('s');
 G = J.C*(s*eye(6)-J.A)^(-1)*J.B
@@ -18,8 +19,8 @@ Kr=lqr(J.A,J.B,Q,R); % optimal state-feedback regulator
 
 % 2) Design Kalman filter % don’t estimate integrator states
 Bnoise = eye(n); % process noise model (Gd)
-W = eye(n); % process noise weight
-V = 1*eye(p); % measurement noise weight
+W = log_vars.W; % process noise weight
+V = log_vars.V; % measurement noise weight
 Estss = ss(J.A,[J.B Bnoise],J.C,[J.D zeros(4,6)]); 
 [Kess, Ke] = kalman(Estss,W,V); % Kalman filter
 %Ke = lqe(J.A,Bnoise,J.C,W,V); % Kalman filter gain
@@ -29,10 +30,10 @@ Estss = ss(J.A,[J.B Bnoise],J.C,[J.D zeros(4,6)]);
 Klqg=[J.A-J.B*Kr-Ke*J.C, Ke;
       -Kr, zeros(2,4)]; % integrator included
 
-% Simulation
-sys1 = feedback(G,Klqg); step(sys1,50); % 1 dof simulation
-sys = feedback(G*Klqg2,1,2,1,+1); % 2 dof simulation
-sys2 = sys*[1; 0]; hold; step(sys2,50);
+% % Simulation
+% sys1 = feedback(G,Klqg); step(sys1,50); % 1 dof simulation
+% sys = feedback(G*Klqg2,1,2,1,+1); % 2 dof simulation
+% sys2 = sys*[1; 0]; hold; step(sys2,50);
 
 % % 3) Form controller from [r y]’ to u
 % Ac=[0mm 0mn;-b*Kri a-b*Krp-Ke*c]; % integrators included
