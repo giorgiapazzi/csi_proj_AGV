@@ -35,8 +35,8 @@ function j_matrix = get_linearization()
     D = simplify(jacobian(h, Tau));
     %F1 = matlabFunction(F);
     
-    x_eq = [0 6.28 0 0];
-    tau_eq = [1 0];
+    x_eq = [0 pi 0 0];
+    tau_eq = [0 0];
     A = double(subs(A, [X(3);X(4);X(5);X(6);Tau(1);Tau(2)], [x_eq'; tau_eq']))
     eig(A);
     B = double(subs(B, [X(3);X(4);X(5);X(6);Tau(1);Tau(2)], [x_eq'; tau_eq']));

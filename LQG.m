@@ -6,10 +6,7 @@ G = J.C*(s*eye(6)-J.A)^(-1)*J.B
 % Model dimensions:
 p = size(J.C,1) % no. of outputs (y)
 [n,m] = size(J.B) % no. of states and inputs (u)
-Znm=zeros(n,m); 
-Zmm=zeros(m,m);
-Znn=zeros(n,n); 
-Zmn=zeros(m,n);
+
 
 % 1) Design state feedback regulator
 Q=[eye(n)]; % weight on integrated error
